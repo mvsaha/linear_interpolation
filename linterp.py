@@ -13,7 +13,10 @@ def find_next_finite(arr, i):
 
 
 sig = [(numba.float64[:], numba.float64[:], numba.float64[:],
-       numba.float64[:], numba.float64[:], numba.float64[:])]
+        numba.float64[:], numba.float64[:], numba.float64[:]), 
+      
+       (numba.float32[:], numba.float32[:], numba.float32[:],
+        numba.float32[:], numba.float32[:], numba.float32[:])]
 
 
 @numba.guvectorize(sig, '(n),(n),(m),(),()->(m)', nopython=True)
@@ -46,22 +49,6 @@ def array_linear_interpolation_1d(x, y, x_new, _extrap, _fill_val, out):
         The value to assign to extrapolated values when extrap is set to 0.
         This argument is ignored in other cases.
     
-    Returns
-    -------
-    y_new - The values of y interpolated/extrapolated at the positions given
-    in `x_new`. If `y_new` was specified in the input then this function
-    will simply return the same array (that is mutated).
-    
-    Notes
-    -----
-    An error will be raised if `x` or `x_new` are not strictly increasing.
-    `x` and `x_new` are not allowed to have NaN values. An error will be raised
-    if NaNs are encountered in either array but intermediate results may
-    be written to `out` before this happens.
-    
-    `y` is allowed to have NaN values. If all of the values in `y` are NaN then
-    an array of NaNs will be returned. If there is only one non-NaN in `y` then
-    the return values depend on the extrapolation method used.
     """
     extrap = _extrap[0]
     fill_val = _fill_val[0]
@@ -234,7 +221,20 @@ def linear_interpolation(x, y, x_new, y_new=None, extrap=0, fill_val=np.nan):
     
     Returns
     -------
-    None if `y_new` was specified, otherwise array of values interpolated at `x_new`.
+    y_new - The values of y interpolated/extrapolated at the positions given
+    in `x_new`. If `y_new` was specified in the input then this function
+    will simply return the same array (that is mutated).
+    
+    Notes
+    -----
+    An error will be raised if `x` or `x_new` are not strictly increasing.
+    `x` and `x_new` are not allowed to have NaN values. An error will be raised
+    if NaNs are encountered in either array but intermediate results may
+    be written to `out` before this happens.
+    
+    `y` is allowed to have NaN values. If all of the values in `y` are NaN then
+    an array of NaNs will be returned. If there is only one non-NaN in `y` then
+    the return values depend on the extrapolation method used.
     """
     ret_y = True if y_new is None else False
     
