@@ -1,2 +1,2 @@
 # linear_interpolation
-Broadcastable linear interpolation
+Fast broadcastable linear interpolation using numba.
